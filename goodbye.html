@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Uninstalled — UT Instapoll Alert</title>
+  <style>
+    /* ── Reset ─────────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Base ───────────────────────────────────────────────────────────────── */
+    html { font-size: 16px; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      background: #0f0f0f;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 56px 24px 72px;
+    }
+
+    /* ── Layout ─────────────────────────────────────────────────────────────── */
+    main {
+      max-width: 460px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────────────────── */
+    .page-header {
+      margin-bottom: 36px;
+    }
+
+    .wordmark {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #555;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #f0f0f0;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .lead {
+      font-size: 15px;
+      color: #777;
+    }
+
+    /* ── Divider ────────────────────────────────────────────────────────────── */
+    .divider {
+      border: none;
+      border-top: 1px solid #1e1e1e;
+      margin: 28px 0;
+    }
+
+    /* ── Form section ────────────────────────────────────────────────────────── */
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #aaa;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Radio options ───────────────────────────────────────────────────────── */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 24px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border: 1px solid #1e1e1e;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .option:hover {
+      border-color: #333;
+      background: #141414;
+    }
+
+    .option input[type="radio"] {
+      accent-color: #bf5700;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .option.selected {
+      border-color: #bf5700;
+      background: #1a0f00;
+      color: #f0f0f0;
+    }
+
+    /* ── Text fields ─────────────────────────────────────────────────────────── */
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .field textarea,
+    .field input[type="email"] {
+      width: 100%;
+      background: #141414;
+      border: 1px solid #262626;
+      border-radius: 7px;
+      color: #e0e0e0;
+      font-family: inherit;
+      font-size: 14px;
+      padding: 10px 12px;
+      outline: none;
+      resize: vertical;
+    }
+
+    .field textarea { min-height: 72px; }
+
+    .field textarea:focus,
+    .field input[type="email"]:focus {
+      border-color: #bf5700;
+    }
+
+    .field textarea::placeholder,
+    .field input[type="email"]::placeholder {
+      color: #444;
+    }
+
+    /* ── Actions ─────────────────────────────────────────────────────────────── */
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .btn-submit {
+      background: #bf5700;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 24px;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-submit:hover { background: #d96100; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .skip-link {
+      font-size: 13px;
+      color: #555;
+      text-decoration: none;
+    }
+
+    .skip-link:hover { color: #888; }
+
+    /* ── Thank-you state ─────────────────────────────────────────────────────── */
+    #thanks {
+      display: none;
+    }
+
+    #thanks h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #f0f0f0;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    #thanks p {
+      font-size: 15px;
+      color: #666;
+    }
+
+    /* ── Error message ────────────────────────────────────────────────────────── */
+    .error-msg {
+      font-size: 13px;
+      color: #e07070;
+      margin-top: 8px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+
+    <!-- Form view -->
+    <div id="form-view">
+
+      <header class="page-header">
+        <p class="wordmark">UT Instapoll Alert</p>
+        <h1>You removed the extension.</h1>
+        <p class="lead">30 seconds of feedback helps us improve this for other students.</p>
+      </header>
+
+      <hr class="divider">
+
+      <form id="feedback-form" novalidate>
+
+        <span class="form-label">Why did you uninstall?</span>
+
+        <div class="options" role="radiogroup" aria-label="Reason for uninstalling">
+          <label class="option" id="opt-broken">
+            <input type="radio" name="reason" value="broken"> It didn't work
+          </label>
+          <label class="option" id="opt-semester">
+            <input type="radio" name="reason" value="semester_over"> My semester is over
+          </label>
+          <label class="option" id="opt-setup">
+            <input type="radio" name="reason" value="too_complicated"> Too complicated to set up
+          </label>
+          <label class="option" id="opt-privacy">
+            <input type="radio" name="reason" value="privacy"> Privacy concerns
+          </label>
+          <label class="option" id="opt-no-polls">
+            <input type="radio" name="reason" value="dont_use_polls"> My class doesn't use Instapoll
+          </label>
+          <label class="option" id="opt-other">
+            <input type="radio" name="reason" value="other"> Something else
+          </label>
+        </div>
+
+        <div class="field">
+          <label for="comment">Anything else? <span style="color:#444">(optional)</span></label>
+          <textarea id="comment" name="comment" placeholder="Tell us what happened or what we could do better…"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="email">Email <span style="color:#444">(optional — only if you'd like a reply)</span></label>
+          <input type="email" id="email" name="email" placeholder="you@utexas.edu">
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-submit" id="submitBtn">Submit feedback</button>
+          <a href="#" class="skip-link" id="skipLink">No thanks</a>
+        </div>
+
+        <p class="error-msg" id="errorMsg">Something went wrong. Try again in a moment.</p>
+
+      </form>
+
+    </div>
+
+    <!-- Thank-you view -->
+    <div id="thanks" aria-live="polite">
+      <p class="wordmark">UT Instapoll Alert</p>
+      <h2>Thanks for the feedback.</h2>
+      <p>We read every response. It goes directly toward making the extension better.</p>
+    </div>
+
+  </main>
+
+  <script>
+    // ──────────────────────────────────────────────────────────────────────────
+    // CONFIG — Web3Forms endpoint + access key
+    // Get access key from https://web3forms.com/dashboard
+    // ──────────────────────────────────────────────────────────────────────────
+    const FEEDBACK_ENDPOINT = 'https://api.web3forms.com/submit';
+    const WEB3FORMS_ACCESS_KEY = 'YOUR_ACCESS_KEY_HERE';  // TODO: replace with your actual key
+
+    const form       = document.getElementById('feedback-form');
+    const formView   = document.getElementById('form-view');
+    const thanks     = document.getElementById('thanks');
+    const submitBtn  = document.getElementById('submitBtn');
+    const skipLink   = document.getElementById('skip-link') || document.querySelector('.skip-link');
+    const errorMsg   = document.getElementById('errorMsg');
+
+    // Highlight selected radio option
+    document.querySelectorAll('.option input[type="radio"]').forEach((radio) => {
+      radio.addEventListener('change', () => {
+        document.querySelectorAll('.option').forEach((o) => o.classList.remove('selected'));
+        radio.closest('.option').classList.add('selected');
+      });
+    });
+
+    function showThanks() {
+      formView.style.display = 'none';
+      thanks.style.display   = 'block';
+    }
+
+    skipLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      showThanks();
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.style.display = 'none';
+
+      const reason  = (form.querySelector('input[name="reason"]:checked') || {}).value || '';
+      const comment = form.querySelector('#comment').value.trim();
+      const email   = form.querySelector('#email').value.trim();
+
+      // If no endpoint is configured, just show thanks silently.
+      if (!FEEDBACK_ENDPOINT) {
+        showThanks();
+        return;
+      }
+
+      submitBtn.disabled    = true;
+      submitBtn.textContent = 'Sending…';
+
+      try {
+        const res = await fetch(FEEDBACK_ENDPOINT, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({
+            access_key: WEB3FORMS_ACCESS_KEY,
+            reason,
+            comment,
+            email,
+            ts: new Date().toISOString(),
+          }),
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        showThanks();
+      } catch (err) {
+        console.error('[UTPoll goodbye]', err);
+        errorMsg.style.display = 'block';
+        submitBtn.disabled    = false;
+        submitBtn.textContent = 'Submit feedback';
+      }
+    });
+  </script>
+
+</body>
+</html>
