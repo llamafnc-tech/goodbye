@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Primary SEO -->
+  <title>UT Instapoll Alert — Free Notifier for UT Austin Students</title>
+  <meta name="description" content="Never miss a UT Instapoll attendance poll again. Free Chrome extension fires an instant audio chime, desktop notification, and phone alert the moment a poll goes live. No ads, no logins, no tracking.">
+  <meta name="keywords" content="UT Instapoll, UT Instapoll notifier, UT attendance notifier, Instapoll tracker, UT Instapoll alert, UT Austin attendance, polls.la.utexas.edu, Instapoll Chrome extension, UT attendance tracker">
+  <link rel="canonical" href="https://adihebbalae.github.io/UTPoll/">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://adihebbalae.github.io/UTPoll/">
+  <meta property="og:title"       content="UT Instapoll Alert — Never Miss an Attendance Poll">
+  <meta property="og:description" content="Free Chrome extension that alerts you the instant a UT Instapoll poll opens — audio chime, desktop pop-up, and phone push. Made by a UT student.">
+  <meta property="og:image"       content="https://adihebbalae.github.io/UTPoll/assets/og-preview.png">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="UT Instapoll Alert — Never Miss an Attendance Poll">
+  <meta name="twitter:description" content="Free Chrome extension that fires an instant alert the moment a UT Instapoll poll opens. No ads, no logins.">
+  <meta name="twitter:image"       content="https://adihebbalae.github.io/UTPoll/assets/og-preview.png">
+
+  <meta name="robots" content="index, follow">
+
+  <!-- Schema: SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "UT Instapoll Alert",
+    "operatingSystem": "Chrome",
+    "applicationCategory": "BrowserApplication",
+    "url": "https://adihebbalae.github.io/UTPoll/",
+    "downloadUrl": "https://github.com/adihebbalae/UTPoll",
+    "description": "A free Chrome extension that monitors UT Instapoll (polls.la.utexas.edu) and fires an instant audio chime, desktop notification, and optional phone push the moment an attendance or participation poll goes live.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "Adi Hebbalae" }
+  }
+  </script>
+
+  <!-- Schema: FAQPage — drives "People Also Ask" rich results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is UT Instapoll?",
+        "acceptedAnswer": { "@type": "Answer", "text": "UT Instapoll is the attendance and participation polling system used by UT Austin courses, hosted at polls.la.utexas.edu. Instructors open time-limited polls during class and students must respond within a few minutes to earn attendance or participation credit." }
+      },
+      {
+        "@type": "Question",
+        "name": "What does UT Instapoll Alert do?",
+        "acceptedAnswer": { "@type": "Answer", "text": "UT Instapoll Alert is a free Chrome extension that watches the Instapoll portal in the background and fires a triple alert — audio chime, desktop notification, and optional phone push via ntfy.sh — the instant a poll opens. You never have to watch the tab." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is UT Instapoll Alert free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, completely free. No subscription, no ads, no hidden costs. Open-source software made by a UT student for UT students." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does it store my UT login or any personal data?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. The extension reads only the API responses your browser already receives within your authenticated session. It never stores or transmits your UT credentials, NetID, student ID, or any personal data." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does UT Instapoll Alert violate the UT Honor Code?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The tool is designed for students physically in class who do not want to miss a poll while taking notes. Using it to answer polls for a class you are not attending violates the UT Honor Code, and the extension explicitly discourages that use." }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I get phone notifications for UT Instapoll?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Enable the ntfy.sh push option in the extension settings, enter a topic name, install the free ntfy app on your phone, and subscribe to the same topic. Your phone will buzz the moment a poll opens." }
+      },
+      {
+        "@type": "Question",
+        "name": "Which browsers does UT Instapoll Alert support?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Chrome and any Chromium-based browser: Microsoft Edge, Brave, and Arc. Firefox is not currently supported." }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Schema: WebSite -->
+  <script type="application/ld+json">
+  { "@context": "https://schema.org", "@type": "WebSite", "name": "UT Instapoll Alert", "url": "https://adihebbalae.github.io/UTPoll/" }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0a0a0a;
+      --bg-card:  #111111;
+      --border:   #222222;
+      --accent:   #bf5700;
+      --text:     #e2e2e2;
+      --muted:    #777777;
+      --dim:      #444444;
+      --r:        10px;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 80px 0; }
+    .section + .section { border-top: 1px solid var(--border); }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,10,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+    }
+    .nav-inner {
+      max-width: 860px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -.01em; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 24px; align-items: center; list-style: none; }
+    .nav-links a { font-size: 13px; color: var(--muted); transition: color .15s; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .btn-nav {
+      background: var(--accent); color: #fff !important;
+      padding: 7px 16px; border-radius: 6px;
+      font-size: 13px !important; font-weight: 600;
+    }
+    .btn-nav:hover { background: #d96200 !important; }
+
+    /* ── Hero ── */
+    .hero { padding: 100px 0 80px; text-align: center; }
+    .hero-eyebrow {
+      display: inline-block; font-size: 12px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .12em; color: var(--accent);
+      background: rgba(191,87,0,.1); border: 1px solid rgba(191,87,0,.25);
+      padding: 4px 12px; border-radius: 100px; margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(30px, 5vw, 52px); font-weight: 800;
+      letter-spacing: -.03em; line-height: 1.1; color: #f5f5f5;
+      margin-bottom: 20px; max-width: 700px; margin-left: auto; margin-right: auto;
+    }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero-sub { font-size: 18px; color: var(--muted); max-width: 520px; margin: 0 auto 36px; line-height: 1.6; }
+    .cta-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent); color: #fff;
+      padding: 14px 28px; border-radius: 8px;
+      font-size: 15px; font-weight: 700;
+      transition: background .15s, transform .1s;
+    }
+    .btn-primary:hover { background: #d96200; text-decoration: none; transform: translateY(-1px); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #111; border: 1px solid var(--border); color: var(--text);
+      padding: 14px 24px; border-radius: 8px;
+      font-size: 15px; font-weight: 600;
+      transition: border-color .15s, transform .1s;
+    }
+    .btn-secondary:hover { border-color: #444; text-decoration: none; transform: translateY(-1px); }
+    .hero-note { margin-top: 18px; font-size: 12px; color: var(--dim); }
+
+    /* ── Problem ── */
+    .prob-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px; }
+    @media (max-width: 600px) { .prob-grid { grid-template-columns: 1fr; } }
+    .p-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; }
+    .p-card .icon { font-size: 26px; margin-bottom: 10px; }
+    .p-card h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .p-card p { font-size: 14px; color: var(--muted); line-height: 1.55; }
+
+    /* ── Section headings ── */
+    .s-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); margin-bottom: 10px; }
+    .s-title { font-size: clamp(22px, 3vw, 32px); font-weight: 800; letter-spacing: -.025em; color: #f0f0f0; margin-bottom: 14px; }
+    .s-sub { font-size: 16px; color: var(--muted); max-width: 540px; }
+
+    /* ── Steps ── */
+    .steps { margin-top: 52px; display: flex; flex-direction: column; }
+    .step { display: grid; grid-template-columns: 40px 1fr; gap: 20px; padding: 28px 0; border-bottom: 1px solid var(--border); }
+    .step:last-child { border-bottom: none; }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(191,87,0,.12); border: 1px solid rgba(191,87,0,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: var(--accent); flex-shrink: 0; margin-top: 2px;
+    }
+    .step h3 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .step p { font-size: 14px; color: var(--muted); line-height: 1.55; }
+
+    /* ── Features ── */
+    .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 52px; }
+    @media (max-width: 680px) { .feat-grid { grid-template-columns: 1fr; } }
+    .f-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); padding: 28px 24px; }
+    .f-card .fi { font-size: 28px; margin-bottom: 14px; }
+    .f-card h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .f-card p { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    /* ── Privacy box ── */
+    .priv-box {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent); border-radius: var(--r);
+      padding: 28px 32px; margin-top: 52px;
+    }
+    .priv-box h3 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+    .priv-box p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── FAQ ── */
+    .faq-list { margin-top: 48px; display: flex; flex-direction: column; gap: 4px; }
+    details { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+    summary {
+      padding: 18px 24px; font-size: 15px; font-weight: 600; color: var(--text);
+      cursor: pointer; list-style: none;
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: '+'; font-size: 20px; color: var(--dim); flex-shrink: 0; }
+    details[open] summary::after { content: '–'; }
+    .faq-body { padding: 16px 24px 20px; font-size: 14px; color: var(--muted); line-height: 1.65; border-top: 1px solid var(--border); }
+
+    /* ── CTA section ── */
+    .cta-sec { text-align: center; padding: 100px 0; }
+    .cta-sec .s-sub { margin: 0 auto 36px; }
+
+    /* ── Badges ── */
+    .badge-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+    .badge { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 100px; border: 1px solid var(--border); color: var(--muted); background: var(--bg-card); }
+
+    /* ── Footer ── */
+    footer { border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; }
+    .footer-inner { max-width: 860px; margin: 0 auto; }
+    .f-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; list-style: none; margin-bottom: 16px; }
+    .f-links a { font-size: 13px; color: var(--muted); }
+    .f-links a:hover { color: var(--text); }
+    .f-copy { font-size: 12px; color: var(--dim); }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav aria-label="Site navigation">
+  <div class="nav-inner">
+    <span class="nav-logo">Instapoll<span>Alert</span></span>
+    <ul class="nav-links">
+      <li><a href="#how-it-works">How it works</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="https://github.com/adihebbalae/UTPoll">GitHub</a></li>
+      <li><a href="https://github.com/adihebbalae/UTPoll" class="btn-nav">Add to Chrome &mdash; Free</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+  <!-- Hero -->
+  <section class="hero container" aria-labelledby="hero-h">
+    <div class="hero-eyebrow">Free Chrome Extension &middot; UT Austin</div>
+    <h1 id="hero-h">Never miss a<br><em>UT Instapoll</em> again</h1>
+    <p class="hero-sub">
+      An instant audio chime, desktop pop-up, and phone alert the second a poll opens on
+      <a href="https://polls.la.utexas.edu" rel="noopener noreferrer" target="_blank">polls.la.utexas.edu</a>
+      — so you can stay focused on your notes.
+    </p>
+    <div class="cta-group">
+      <a href="https://github.com/adihebbalae/UTPoll" class="btn-primary">&#128276; Add to Chrome &mdash; Free</a>
+      <a href="https://github.com/adihebbalae/UTPoll" class="btn-secondary">&#11088; View on GitHub</a>
+    </div>
+    <p class="hero-note">No account required &middot; No ads &middot; No tracking &middot; Open source &middot; MIT license</p>
+  </section>
+
+  <!-- Problem -->
+  <section class="section" aria-labelledby="prob-h">
+    <div class="container">
+      <p class="s-label">The Problem</p>
+      <h2 id="prob-h" class="s-title">Instapoll closes in 3 minutes.<br>Your notes don&rsquo;t stop.</h2>
+      <p class="s-sub">UT Instapoll polls appear without warning and close fast. Every UT Austin student has been here.</p>
+      <div class="prob-grid">
+        <div class="p-card">
+          <div class="icon" aria-hidden="true">&#128221;</div>
+          <h3>Deep in your notes</h3>
+          <p>You are finally in a flow state, typing fast&nbsp;&mdash; and the poll opens and closes in the background before you notice the tiny favicon change.</p>
+        </div>
+        <div class="p-card">
+          <div class="icon" aria-hidden="true">&#128263;</div>
+          <h3>Laptop on silent</h3>
+          <p>You muted your laptop during lecture. Instapoll has no audible alert. By the time you glance over, the 3-minute window is gone.</p>
+        </div>
+        <div class="p-card">
+          <div class="icon" aria-hidden="true">&#128187;</div>
+          <h3>Two monitors, zero alerts</h3>
+          <p>The Instapoll tab is open on your second screen but the poll appeared while you were reading elsewhere and there is no obvious notification.</p>
+        </div>
+        <div class="p-card">
+          <div class="icon" aria-hidden="true">&#128201;</div>
+          <h3>One missed poll, minus 2%</h3>
+          <p>Many courses weight attendance polls heavily enough that missing two or three tanks your grade. Each missed poll is an avoidable loss.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section" id="how-it-works" aria-labelledby="how-h">
+    <div class="container">
+      <p class="s-label">How It Works</p>
+      <h2 id="how-h" class="s-title">Set it up once. Forget about it.</h2>
+      <p class="s-sub">UT Instapoll Alert runs silently in the background. No extra tabs to watch, no extra logins.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num" aria-hidden="true">1</div>
+          <div>
+            <h3>Install the extension</h3>
+            <p>Load unpacked from GitHub or install from the Chrome Web Store. Click the toolbar icon and enter your Instapoll Course ID. Takes under two minutes.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" aria-hidden="true">2</div>
+          <div>
+            <h3>Open Instapoll and go to class</h3>
+            <p>Keep <a href="https://polls.la.utexas.edu" rel="noopener noreferrer" target="_blank">polls.la.utexas.edu</a> open in any tab. The extension monitors the page&rsquo;s own network traffic &mdash; no extra requests, no credentials stored.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" aria-hidden="true">3</div>
+          <div>
+            <h3>Get alerted the instant a poll opens</h3>
+            <p>The moment a live UT Instapoll poll is detected, you hear an audio chime, see a desktop notification, and optionally receive a push to your phone. Click through and submit before the window closes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" aria-labelledby="feat-h">
+    <div class="container">
+      <p class="s-label">Features</p>
+      <h2 id="feat-h" class="s-title">Everything you need. Nothing you don&rsquo;t.</h2>
+      <p class="s-sub">Lightweight, private, and fully open-source.</p>
+      <div class="feat-grid">
+        <div class="f-card">
+          <div class="fi" aria-hidden="true">&#128276;</div>
+          <h3>Triple-layer alerts</h3>
+          <p>Audio chime + desktop notification + optional ntfy.sh phone push. Works even if your laptop is muted or you are in another app.</p>
+        </div>
+        <div class="f-card">
+          <div class="fi" aria-hidden="true">&#128241;</div>
+          <h3>Phone push via ntfy.sh</h3>
+          <p>Set up a free ntfy topic and your phone buzzes the instant a poll opens &mdash; even when your laptop speakers are off.</p>
+        </div>
+        <div class="f-card">
+          <div class="fi" aria-hidden="true">&#9889;</div>
+          <h3>Zero-latency detection</h3>
+          <p>Intercepts the page&rsquo;s own network requests &mdash; no polling, no delay. Alert fires in the same second the poll becomes live.</p>
+        </div>
+        <div class="f-card">
+          <div class="fi" aria-hidden="true">&#128274;</div>
+          <h3>No logins or data stored</h3>
+          <p>Your UT credentials never touch this extension. It reads only responses your browser already receives in your authenticated session.</p>
+        </div>
+        <div class="f-card">
+          <div class="fi" aria-hidden="true">&#127919;</div>
+          <h3>Filter by course</h3>
+          <p>TA for multiple courses? Filter alerts to a specific Course ID so you only get notified for the polls that matter to you.</p>
+        </div>
+        <div class="f-card">
+          <div class="fi" aria-hidden="true">&#128218;</div>
+          <h3>Fully open source</h3>
+          <p>Every line of code is on GitHub under the MIT license. Inspect it, fork it, improve it. No black boxes, ever.</p>
+        </div>
+      </div>
+      <div class="priv-box" role="note">
+        <h3>Privacy and academic integrity</h3>
+        <p>
+          No ads, no analytics, no monetization of any kind. Your UT credentials are never accessed.
+          This tool is intended for students physically attending class who do not want to miss a poll while taking notes.
+          Using it to earn attendance credit for a class you are not attending violates the UT Honor Code, and the extension explicitly discourages that use.
+          <a href="https://github.com/adihebbalae/UTPoll/blob/main/chrome-extension/PRIVACY_POLICY.md">Read the full privacy policy &#8594;</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq" aria-labelledby="faq-h">
+    <div class="container">
+      <p class="s-label">FAQ</p>
+      <h2 id="faq-h" class="s-title">Common questions</h2>
+      <p class="s-sub">Everything UT students ask before installing.</p>
+      <div class="faq-list">
+
+        <details>
+          <summary>What is UT Instapoll?</summary>
+          <div class="faq-body">
+            UT Instapoll is the attendance and participation polling system used by UT Austin courses, hosted at
+            <a href="https://polls.la.utexas.edu" rel="noopener noreferrer" target="_blank">polls.la.utexas.edu</a>.
+            Instructors release time-limited polls during class &mdash; typically open for 2&ndash;5 minutes &mdash; and students earn credit by responding.
+          </div>
+        </details>
+
+        <details>
+          <summary>Is UT Instapoll Alert free?</summary>
+          <div class="faq-body">
+            Yes, completely free. No subscription, no trial, no ads.
+            Open-source software made by a UT Austin student.
+            <a href="https://github.com/adihebbalae/UTPoll">Inspect every line of code on GitHub.</a>
+          </div>
+        </details>
+
+        <details>
+          <summary>Does it store my UT login or NetID?</summary>
+          <div class="faq-body">
+            No. The extension never requests, reads, or stores your UT credentials, NetID, or student ID.
+            It only reads the API responses your browser already receives in your own authenticated session.
+          </div>
+        </details>
+
+        <details>
+          <summary>Does UT Instapoll Alert violate the UT Honor Code?</summary>
+          <div class="faq-body">
+            The extension is designed for students physically present in class who want to avoid missing a poll while taking notes.
+            Using it to answer polls for a class you are not attending violates the
+            <a href="https://liberalarts.utexas.edu/dean/academic-integrity/index.php" rel="noopener noreferrer" target="_blank">UT Honor Code</a>,
+            and the extension explicitly discourages that use.
+          </div>
+        </details>
+
+        <details>
+          <summary>How do I get phone alerts for Instapoll?</summary>
+          <div class="faq-body">
+            Enable the ntfy.sh push option in the extension popup and enter any topic name you choose (a random string works well).
+            Install the free <a href="https://ntfy.sh" rel="noopener noreferrer" target="_blank">ntfy app</a> on your phone and subscribe to the same topic.
+            Your phone will buzz the moment a poll opens.
+          </div>
+        </details>
+
+        <details>
+          <summary>Which browsers are supported?</summary>
+          <div class="faq-body">
+            Chrome and any Chromium-based browser: Microsoft Edge, Brave, and Arc all work. Firefox is not currently supported.
+          </div>
+        </details>
+
+        <details>
+          <summary>How is this different from just watching the Instapoll tab?</summary>
+          <div class="faq-body">
+            Instapoll gives no audio alert and the only visual cue is a subtle change in tab content.
+            If you are working in another app or your laptop is muted, it is easy to miss.
+            UT Instapoll Alert interrupts you with sound, a system notification, and optionally a phone buzz &mdash; whichever reaches you first.
+          </div>
+        </details>
+
+      </div>
+      <div class="badge-row" aria-label="Extension attributes">
+        <span class="badge">Manifest V3</span>
+        <span class="badge">Chrome Extension</span>
+        <span class="badge">MIT License</span>
+        <span class="badge">No ads</span>
+        <span class="badge">No analytics</span>
+        <span class="badge">Open source</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="cta-sec" aria-labelledby="cta-h">
+    <div class="container">
+      <p class="s-label">Get started</p>
+      <h2 id="cta-h" class="s-title">Stop missing Instapoll polls.</h2>
+      <p class="s-sub">Free to install. Takes two minutes. Works the next time you are in lecture.</p>
+      <div class="cta-group">
+        <a href="https://github.com/adihebbalae/UTPoll" class="btn-primary">&#128276; Add to Chrome &mdash; Free</a>
+        <a href="https://github.com/adihebbalae/UTPoll" class="btn-secondary">View Source on GitHub</a>
+      </div>
+      <p class="hero-note">UT Austin students only &middot; Made by a Longhorn, for Longhorns &middot; Hook &rsquo;em &#129304;</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <ul class="f-links">
+      <li><a href="https://github.com/adihebbalae/UTPoll">GitHub</a></li>
+      <li><a href="https://github.com/adihebbalae/UTPoll/blob/main/chrome-extension/PRIVACY_POLICY.md">Privacy Policy</a></li>
+      <li><a href="https://github.com/adihebbalae/UTPoll/blob/main/chrome-extension/LICENSE">MIT License</a></li>
+      <li><a href="https://liberalarts.utexas.edu/dean/academic-integrity/index.php" rel="noopener noreferrer" target="_blank">UT Honor Code</a></li>
+    </ul>
+    <p class="f-copy">
+      Not affiliated with or endorsed by UT Austin. Free, open-source, non-commercial student project.<br>
+      &copy; 2026 UT Instapoll Alert contributors. MIT License.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
