@@ -34,7 +34,7 @@
     "operatingSystem": "Chrome",
     "applicationCategory": "BrowserApplication",
     "url": "https://adihebbalae.github.io/UTPoll/",
-    "downloadUrl": "https://github.com/adihebbalae/UTPoll",
+    "downloadUrl": "https://chromewebstore.google.com/detail/ut-instapoll-alert/ljcbfiifmkajnlmdpfmcnfjcekpijmdg",
     "description": "A free Chrome extension that monitors UT Instapoll (polls.la.utexas.edu) and fires an instant audio chime, desktop notification, and optional phone push the moment an attendance or participation poll goes live.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "author": { "@type": "Person", "name": "Adi Hebbalae" }
@@ -91,41 +91,60 @@
   { "@context": "https://schema.org", "@type": "WebSite", "name": "UT Instapoll Alert", "url": "https://adihebbalae.github.io/UTPoll/" }
   </script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #0a0a0a;
-      --bg-card:  #111111;
-      --border:   #222222;
-      --accent:   #bf5700;
-      --text:     #e2e2e2;
-      --muted:    #777777;
-      --dim:      #444444;
-      --r:        10px;
+      --bg:          #09090f;
+      --bg-card:     rgba(255,255,255,0.035);
+      --bg-card-h:   rgba(255,255,255,0.065);
+      --border:      rgba(255,255,255,0.09);
+      --border-acc:  rgba(191,87,0,0.35);
+      --accent:      #c45f00;
+      --accent-l:    #e07318;
+      --accent-glow: rgba(196,95,0,0.3);
+      --accent-bg:   rgba(191,87,0,0.09);
+      --text:        #f0ede8;
+      --muted:       rgba(240,237,232,0.52);
+      --dim:         rgba(240,237,232,0.24);
+      --r:           14px;
     }
 
     html { font-size: 16px; scroll-behavior: smooth; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.65;
+      overflow-x: hidden;
     }
 
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    a { color: var(--accent-l); text-decoration: none; }
+    a:hover { color: var(--text); text-decoration: underline; }
+
+    /* ── Scroll fade-in ── */
+    .fade-init {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .fade-init.visible { opacity: 1; transform: none; }
 
     .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
-    .section { padding: 80px 0; }
+    .section { padding: 96px 0; }
     .section + .section { border-top: 1px solid var(--border); }
 
     /* ── Nav ── */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(10,10,10,.92);
-      backdrop-filter: blur(10px);
+      background: rgba(9,9,15,0.85);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
       border-bottom: 1px solid var(--border);
       padding: 14px 24px;
     }
@@ -133,124 +152,258 @@
       max-width: 860px; margin: 0 auto;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .nav-logo { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -.01em; }
-    .nav-logo span { color: var(--accent); }
+    .nav-logo { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -.02em; }
+    .nav-logo span { color: var(--accent-l); }
     .nav-links { display: flex; gap: 24px; align-items: center; list-style: none; }
-    .nav-links a { font-size: 13px; color: var(--muted); transition: color .15s; }
+    .nav-links a { font-size: 13px; color: var(--muted); transition: color .2s; }
     .nav-links a:hover { color: var(--text); text-decoration: none; }
     .btn-nav {
-      background: var(--accent); color: #fff !important;
-      padding: 7px 16px; border-radius: 6px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-l) 100%);
+      color: #fff !important;
+      padding: 8px 18px; border-radius: 8px;
       font-size: 13px !important; font-weight: 600;
+      transition: opacity .2s, transform .2s, box-shadow .2s;
     }
-    .btn-nav:hover { background: #d96200 !important; }
+    .btn-nav:hover {
+      opacity: 0.88; transform: translateY(-1px);
+      box-shadow: 0 4px 18px var(--accent-glow);
+      text-decoration: none !important;
+    }
 
     /* ── Hero ── */
-    .hero { padding: 100px 0 80px; text-align: center; }
+    .hero {
+      padding: 110px 0 96px; text-align: center;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 800px; max-width: 100vw; height: 480px;
+      background: radial-gradient(ellipse 60% 50% at 50% 30%, rgba(191,87,0,0.13) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero > * { position: relative; z-index: 1; }
+
+    .hero-visual {
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 28px;
+    }
+    .hero-icon-wrap {
+      position: relative;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .hero-ring {
+      position: absolute; inset: -14px; border-radius: 28px;
+      border: 1px solid rgba(191,87,0,0.28);
+      animation: ring-pulse 3s ease-in-out infinite;
+    }
+    .hero-ring-2 {
+      position: absolute; inset: -28px; border-radius: 40px;
+      border: 1px solid rgba(191,87,0,0.12);
+      animation: ring-pulse 3s ease-in-out infinite 0.6s;
+    }
+    @keyframes ring-pulse {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 0.15; transform: scale(1.06); }
+    }
+    .hero-icon-inner {
+      width: 80px; height: 80px;
+      background: var(--accent-bg);
+      border: 1px solid var(--border-acc);
+      border-radius: 24px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px;
+    }
+
     .hero-eyebrow {
-      display: inline-block; font-size: 12px; font-weight: 600;
-      text-transform: uppercase; letter-spacing: .12em; color: var(--accent);
-      background: rgba(191,87,0,.1); border: 1px solid rgba(191,87,0,.25);
-      padding: 4px 12px; border-radius: 100px; margin-bottom: 24px;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .14em; color: var(--accent-l);
+      background: var(--accent-bg); border: 1px solid var(--border-acc);
+      padding: 5px 14px; border-radius: 100px; margin-bottom: 24px;
     }
     .hero h1 {
-      font-size: clamp(30px, 5vw, 52px); font-weight: 800;
-      letter-spacing: -.03em; line-height: 1.1; color: #f5f5f5;
-      margin-bottom: 20px; max-width: 700px; margin-left: auto; margin-right: auto;
+      font-size: clamp(32px, 5.5vw, 58px); font-weight: 800;
+      letter-spacing: -.04em; line-height: 1.08;
+      color: var(--text); margin-bottom: 22px;
+      max-width: 720px; margin-left: auto; margin-right: auto;
     }
-    .hero h1 em { font-style: normal; color: var(--accent); }
-    .hero-sub { font-size: 18px; color: var(--muted); max-width: 520px; margin: 0 auto 36px; line-height: 1.6; }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(100deg, var(--accent) 0%, var(--accent-l) 55%, #f59e0b 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub { font-size: 17px; color: var(--muted); max-width: 500px; margin: 0 auto 40px; line-height: 1.7; }
     .cta-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
     .btn-primary {
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--accent); color: #fff;
-      padding: 14px 28px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-l) 100%);
+      color: #fff; padding: 15px 30px; border-radius: var(--r);
       font-size: 15px; font-weight: 700;
-      transition: background .15s, transform .1s;
+      box-shadow: 0 4px 22px rgba(191,87,0,0.35);
+      transition: transform .2s, box-shadow .2s, opacity .15s;
     }
-    .btn-primary:hover { background: #d96200; text-decoration: none; transform: translateY(-1px); }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 36px rgba(191,87,0,0.52);
+      opacity: 0.92; text-decoration: none;
+    }
+    .btn-primary:active { transform: translateY(0); box-shadow: 0 2px 12px rgba(191,87,0,0.3); }
+    .btn-primary:focus-visible { outline: 2px solid var(--accent-l); outline-offset: 3px; }
     .btn-secondary {
       display: inline-flex; align-items: center; gap: 8px;
-      background: #111; border: 1px solid var(--border); color: var(--text);
-      padding: 14px 24px; border-radius: 8px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      color: var(--text); padding: 15px 26px; border-radius: var(--r);
       font-size: 15px; font-weight: 600;
-      transition: border-color .15s, transform .1s;
+      transition: background .2s, border-color .2s, transform .2s;
     }
-    .btn-secondary:hover { border-color: #444; text-decoration: none; transform: translateY(-1px); }
-    .hero-note { margin-top: 18px; font-size: 12px; color: var(--dim); }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.2);
+      transform: translateY(-2px); text-decoration: none;
+    }
+    .btn-secondary:active { transform: translateY(0); }
+    .btn-secondary:focus-visible { outline: 2px solid var(--accent-l); outline-offset: 3px; }
+    .hero-note { margin-top: 22px; font-size: 11px; color: var(--dim); letter-spacing: 0.03em; }
 
     /* ── Problem ── */
-    .prob-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px; }
+    .prob-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 52px; }
     @media (max-width: 600px) { .prob-grid { grid-template-columns: 1fr; } }
-    .p-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; }
-    .p-card .icon { font-size: 26px; margin-bottom: 10px; }
-    .p-card h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-    .p-card p { font-size: 14px; color: var(--muted); line-height: 1.55; }
+    .p-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 26px;
+      transition: background .25s, border-color .25s, transform .25s, box-shadow .25s;
+    }
+    .p-card:hover {
+      background: var(--bg-card-h); border-color: rgba(255,255,255,0.14);
+      transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,0.4);
+    }
+    .p-card .icon { font-size: 26px; margin-bottom: 12px; }
+    .p-card h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 7px; }
+    .p-card p { font-size: 14px; color: var(--muted); line-height: 1.65; }
 
     /* ── Section headings ── */
-    .s-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); margin-bottom: 10px; }
-    .s-title { font-size: clamp(22px, 3vw, 32px); font-weight: 800; letter-spacing: -.025em; color: #f0f0f0; margin-bottom: 14px; }
-    .s-sub { font-size: 16px; color: var(--muted); max-width: 540px; }
+    .s-label {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .14em; color: var(--accent-l);
+      margin-bottom: 12px;
+    }
+    .s-title { font-size: clamp(24px, 3.2vw, 36px); font-weight: 800; letter-spacing: -.03em; color: var(--text); margin-bottom: 14px; line-height: 1.2; }
+    .s-sub { font-size: 16px; color: var(--muted); max-width: 540px; line-height: 1.7; }
 
     /* ── Steps ── */
-    .steps { margin-top: 52px; display: flex; flex-direction: column; }
+    .steps { margin-top: 56px; display: flex; flex-direction: column; position: relative; }
+    .steps::before {
+      content: ''; position: absolute; left: 17px; top: 46px; bottom: 46px;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent) 0%, rgba(191,87,0,0.08) 100%);
+    }
     .step { display: grid; grid-template-columns: 40px 1fr; gap: 20px; padding: 28px 0; border-bottom: 1px solid var(--border); }
     .step:last-child { border-bottom: none; }
     .step-num {
       width: 36px; height: 36px; border-radius: 50%;
-      background: rgba(191,87,0,.12); border: 1px solid rgba(191,87,0,.3);
+      background: var(--accent-bg); border: 1px solid var(--border-acc);
       display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 700; color: var(--accent); flex-shrink: 0; margin-top: 2px;
+      font-size: 13px; font-weight: 700; color: var(--accent-l);
+      flex-shrink: 0; margin-top: 2px;
+      transition: background .2s, box-shadow .2s;
     }
-    .step h3 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
-    .step p { font-size: 14px; color: var(--muted); line-height: 1.55; }
+    .step:hover .step-num { background: rgba(191,87,0,0.18); box-shadow: 0 0 16px rgba(191,87,0,0.3); }
+    .step h3 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .step p { font-size: 14px; color: var(--muted); line-height: 1.65; }
 
     /* ── Features ── */
-    .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 52px; }
+    .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 52px; }
     @media (max-width: 680px) { .feat-grid { grid-template-columns: 1fr; } }
-    .f-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); padding: 28px 24px; }
-    .f-card .fi { font-size: 28px; margin-bottom: 14px; }
+    .f-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 28px 24px;
+      transition: background .25s, border-color .25s, transform .25s, box-shadow .25s;
+    }
+    .f-card:hover {
+      background: var(--bg-card-h); border-color: rgba(255,255,255,0.14);
+      transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,0.4);
+    }
+    .f-card .fi { font-size: 28px; margin-bottom: 14px; display: block; }
     .f-card h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-    .f-card p { font-size: 13px; color: var(--muted); line-height: 1.55; }
+    .f-card p { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
     /* ── Privacy box ── */
     .priv-box {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-left: 3px solid var(--accent); border-radius: var(--r);
-      padding: 28px 32px; margin-top: 52px;
+      background: rgba(191,87,0,0.05); border: 1px solid rgba(191,87,0,0.18);
+      border-radius: var(--r); padding: 28px 32px; margin-top: 20px;
+      position: relative; overflow: hidden;
     }
-    .priv-box h3 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
-    .priv-box p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .priv-box::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent-l));
+    }
+    .priv-box h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 9px; }
+    .priv-box p { font-size: 14px; color: var(--muted); line-height: 1.7; }
 
     /* ── FAQ ── */
-    .faq-list { margin-top: 48px; display: flex; flex-direction: column; gap: 4px; }
-    details { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+    .faq-list { margin-top: 48px; display: flex; flex-direction: column; gap: 6px; }
+    details {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); overflow: hidden;
+      transition: border-color .2s;
+    }
+    details[open] { border-color: rgba(255,255,255,0.15); }
     summary {
-      padding: 18px 24px; font-size: 15px; font-weight: 600; color: var(--text);
+      padding: 20px 24px; font-size: 15px; font-weight: 600; color: var(--text);
       cursor: pointer; list-style: none;
       display: flex; justify-content: space-between; align-items: center; gap: 16px;
-      user-select: none;
+      user-select: none; transition: color .15s;
     }
+    summary:hover { color: #fff; }
     summary::-webkit-details-marker { display: none; }
-    summary::after { content: '+'; font-size: 20px; color: var(--dim); flex-shrink: 0; }
-    details[open] summary::after { content: '–'; }
-    .faq-body { padding: 16px 24px 20px; font-size: 14px; color: var(--muted); line-height: 1.65; border-top: 1px solid var(--border); }
+    summary::after {
+      content: '+'; font-size: 20px; font-weight: 300;
+      color: var(--muted); flex-shrink: 0;
+      transition: transform .25s, color .2s;
+    }
+    details[open] summary::after { content: '+'; transform: rotate(45deg); color: var(--accent-l); }
+    .faq-body {
+      padding: 16px 24px 22px;
+      font-size: 14px; color: var(--muted); line-height: 1.75;
+      border-top: 1px solid var(--border);
+    }
 
     /* ── CTA section ── */
-    .cta-sec { text-align: center; padding: 100px 0; }
+    .cta-sec {
+      text-align: center; padding: 100px 0 112px;
+      position: relative;
+    }
+    .cta-sec::before {
+      content: ''; position: absolute;
+      bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 600px; max-width: 100vw; height: 320px;
+      background: radial-gradient(ellipse 70% 60% at 50% 80%, rgba(191,87,0,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-sec > * { position: relative; }
     .cta-sec .s-sub { margin: 0 auto 36px; }
 
     /* ── Badges ── */
-    .badge-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
-    .badge { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 100px; border: 1px solid var(--border); color: var(--muted); background: var(--bg-card); }
+    .badge-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 36px; }
+    .badge {
+      font-size: 11px; font-weight: 600; padding: 4px 12px;
+      border-radius: 100px; border: 1px solid var(--border);
+      color: var(--muted); background: var(--bg-card); letter-spacing: 0.02em;
+    }
 
     /* ── Footer ── */
-    footer { border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; }
+    footer { border-top: 1px solid var(--border); padding: 44px 24px; text-align: center; }
     .footer-inner { max-width: 860px; margin: 0 auto; }
-    .f-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; list-style: none; margin-bottom: 16px; }
-    .f-links a { font-size: 13px; color: var(--muted); }
-    .f-links a:hover { color: var(--text); }
-    .f-copy { font-size: 12px; color: var(--dim); }
+    .f-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; list-style: none; margin-bottom: 18px; }
+    .f-links a { font-size: 13px; color: var(--muted); transition: color .2s; }
+    .f-links a:hover { color: var(--text); text-decoration: none; }
+    .f-copy { font-size: 12px; color: var(--dim); line-height: 1.8; }
+
+    /* ── Responsive nav ── */
+    @media (max-width: 640px) {
+      .nav-links li:not(:last-child) { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -263,7 +416,7 @@
       <li><a href="#how-it-works">How it works</a></li>
       <li><a href="#faq">FAQ</a></li>
       <li><a href="https://github.com/adihebbalae/UTPoll">GitHub</a></li>
-      <li><a href="https://github.com/adihebbalae/UTPoll" class="btn-nav">Add to Chrome &mdash; Free</a></li>
+      <li><a href="https://chromewebstore.google.com/detail/ut-instapoll-alert/ljcbfiifmkajnlmdpfmcnfjcekpijmdg" class="btn-nav" target="_blank" rel="noopener noreferrer">Add to Chrome &mdash; Free</a></li>
     </ul>
   </div>
 </nav>
@@ -272,16 +425,23 @@
 
   <!-- Hero -->
   <section class="hero container" aria-labelledby="hero-h">
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-icon-wrap">
+        <div class="hero-ring"></div>
+        <div class="hero-ring-2"></div>
+        <div class="hero-icon-inner">&#128276;</div>
+      </div>
+    </div>
     <div class="hero-eyebrow">Free Chrome Extension &middot; UT Austin</div>
     <h1 id="hero-h">Never miss a<br><em>UT Instapoll</em> again</h1>
     <p class="hero-sub">
       An instant audio chime, desktop pop-up, and phone alert the second a poll opens on
       <a href="https://polls.la.utexas.edu" rel="noopener noreferrer" target="_blank">polls.la.utexas.edu</a>
-      — so you can stay focused on your notes.
+      &mdash; so you can stay focused on your notes.
     </p>
     <div class="cta-group">
-      <a href="https://github.com/adihebbalae/UTPoll" class="btn-primary">&#128276; Add to Chrome &mdash; Free</a>
-      <a href="https://github.com/adihebbalae/UTPoll" class="btn-secondary">&#11088; View on GitHub</a>
+      <a href="https://chromewebstore.google.com/detail/ut-instapoll-alert/ljcbfiifmkajnlmdpfmcnfjcekpijmdg" class="btn-primary" target="_blank" rel="noopener noreferrer">&#128276; Add to Chrome &mdash; Free</a>
+      <a href="https://github.com/adihebbalae/UTPoll" class="btn-secondary" target="_blank" rel="noopener noreferrer">&#11088; View on GitHub</a>
     </div>
     <p class="hero-note">No account required &middot; No ads &middot; No tracking &middot; Open source &middot; MIT license</p>
   </section>
@@ -328,7 +488,7 @@
           <div class="step-num" aria-hidden="true">1</div>
           <div>
             <h3>Install the extension</h3>
-            <p>Load unpacked from GitHub or install from the Chrome Web Store. Click the toolbar icon and enter your Instapoll Course ID. Takes under two minutes.</p>
+            <p>Install free from the <a href="https://chromewebstore.google.com/detail/ut-instapoll-alert/ljcbfiifmkajnlmdpfmcnfjcekpijmdg" target="_blank" rel="noopener noreferrer">Chrome Web Store</a>. Click the toolbar icon and enter your Instapoll Course ID. Takes under two minutes.</p>
           </div>
         </div>
         <div class="step">
@@ -487,8 +647,8 @@
       <h2 id="cta-h" class="s-title">Stop missing Instapoll polls.</h2>
       <p class="s-sub">Free to install. Takes two minutes. Works the next time you are in lecture.</p>
       <div class="cta-group">
-        <a href="https://github.com/adihebbalae/UTPoll" class="btn-primary">&#128276; Add to Chrome &mdash; Free</a>
-        <a href="https://github.com/adihebbalae/UTPoll" class="btn-secondary">View Source on GitHub</a>
+      <a href="https://chromewebstore.google.com/detail/ut-instapoll-alert/ljcbfiifmkajnlmdpfmcnfjcekpijmdg" class="btn-primary" target="_blank" rel="noopener noreferrer">&#128276; Add to Chrome &mdash; Free</a>
+      <a href="https://github.com/adihebbalae/UTPoll" class="btn-secondary" target="_blank" rel="noopener noreferrer">View Source on GitHub</a>
       </div>
       <p class="hero-note">UT Austin students only &middot; Made by a Longhorn, for Longhorns &middot; Hook &rsquo;em &#129304;</p>
     </div>
@@ -511,5 +671,30 @@
   </div>
 </footer>
 
+<script>
+  // Scroll fade-in for all cards, steps, section headings (skip hero)
+  (function () {
+    'use strict';
+    var targets = document.querySelectorAll(
+      'main > section:not(.hero) .s-label, main > section:not(.hero) .s-title, main > section:not(.hero) .s-sub, .p-card, .f-card, .step, .priv-box, .faq-list details, .badge-row, .cta-sec .s-label, .cta-sec .s-title, .cta-sec .s-sub, .cta-sec .cta-group, .cta-sec .hero-note'
+    );
+    if (!('IntersectionObserver' in window)) return;
+    targets.forEach(function (el, i) {
+      el.classList.add('fade-init');
+      // stagger cards in grids
+      var delay = (i % 4) * 80;
+      el.style.transitionDelay = delay + 'ms';
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    targets.forEach(function (el) { io.observe(el); });
+  }());
+</script>
 </body>
 </html>
