@@ -1,1 +1,1 @@
-https://llamafnc-tech.github.io/goodbye/goodbye.html
+https://llamafnc-tech.github.io/goodbye/
