@@ -280,11 +280,12 @@
 
   <script>
     // ──────────────────────────────────────────────────────────────────────────
-    // CONFIG — Web3Forms endpoint + access key
-    // Get access key from https://web3forms.com/dashboard
+    // CONFIG — Web3Forms endpoint + public access key
+    // The access_key is public and safe for client-side use.
+    // Get it from https://web3forms.com/dashboard
     // ──────────────────────────────────────────────────────────────────────────
     const FEEDBACK_ENDPOINT = 'https://api.web3forms.com/submit';
-    const WEB3FORMS_ACCESS_KEY = '4a362b89-0f59-4a44-8a93-9c5694063bfe';  // TODO: replace with your actual key
+    const WEB3FORMS_ACCESS_KEY = 'YOUR_ACCESS_KEY_HERE';  // TODO: replace with your actual public key
 
     const form       = document.getElementById('feedback-form');
     const formView   = document.getElementById('form-view');
